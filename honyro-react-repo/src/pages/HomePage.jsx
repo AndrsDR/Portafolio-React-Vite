@@ -1,5 +1,5 @@
 
-import { Sidebar } from '../components/sidebar'
+import { Sidebar } from '../components/Sidebar'
 import { InfiniteCarousel } from '../components/InfiniteCarousel.jsx'; 
 import { CarouselWithArrows } from '../components/CarouselWithArrows.jsx';
 import { ProductCard } from '../components/ProductCard.jsx'; 
@@ -168,3 +168,4 @@ export function HomePage() {
         </>
     )
 }
+
