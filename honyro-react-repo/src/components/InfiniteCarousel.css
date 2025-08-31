@@ -1,0 +1,20 @@
+
+.carousel-container {
+    width: 90%;
+    overflow: auto;
+    position: relative;
+    margin: auto;
+    overflow-x: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
+}
+
+.carousel-content {
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+.carousel-container .item {
+    margin-left: 1rem;
+}
