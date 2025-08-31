@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import products from '../mocks/products.json';
-import { Sidebar } from '../components/sidebar';
+import { Sidebar } from '../components/Sidebar';
 import './ProductWindow.css';
 import { Translate } from '../components/Translate';
 import { useContext } from 'react';
@@ -63,3 +63,4 @@ export function ProductWindow() {
         </>
     );
 }
+
