@@ -2,10 +2,8 @@
   "rewrites": [
     { "source": "/api", "destination": "/api/index" },
     { "source": "/api/", "destination": "/api/index" },
-
     { "source": "/api/translate", "destination": "/api/translate/index" },
     { "source": "/api/translate/", "destination": "/api/translate/index" },
-
     { "source": "/api/translate-batch", "destination": "/api/translate-batch/index" },
     { "source": "/api/translate-batch/", "destination": "/api/translate-batch/index" }
   ]
