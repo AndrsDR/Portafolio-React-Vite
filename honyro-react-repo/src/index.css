@@ -1,0 +1,246 @@
+:root {
+  /* Fondos */
+  --bg-body: #0f0f0f;           /* fondo general (negro suave) */
+  --bg-surface: #121212;        /* contenedores comunes */
+  --bg-header: #181818;         /* encabezados  */
+
+  /* Extensiones recomendadas */
+  --bg-card:        #1A1A1A;   /* tarjetas, contenedores destacados */
+  --bg-hover:       #1F1F1F;   /* estado hover para botones o cards */
+  --bg-elevated:    #242424;   /* componentes con más profundidad o énfasis */
+
+  /* Bordes y sombras */
+  --border-default: #2c2c2c;
+  --shadow-medium: rgba(0, 0, 0, 0.4);
+  --gradient-strong: rgba(0, 0, 0, 0.75);
+  --gradient-soft: rgba(0, 0, 0, 0.35);
+
+
+
+  /* Textos principales */
+  --text-primary: #FFFFFF;     /* Títulos importantes, como h1, h2 */
+  --text-secondary: #fffb;   /* Párrafos normales (p, li) */
+  --text-tertiary: #fff8;     /* Notas, etiquetas, small */
+  --text-disabled: #fff5;     /* Placeholder*/     
+
+  /* Enlaces y acentos */
+  --text-accent: #64B5F6;        /* Enlaces principales o colores de marca */
+  --text-accent-hover: #90CAF9;  /* Hover de enlace */
+  --text-accent-visited: #5A92D6; /* Link visitado opcional */
+
+
+  /* Layout */
+  --sidebar-width: 250px;
+  --sidebar-closed-width: 60px;
+
+  --header-height: clamp(56px, 7vw, 72px);
+
+  --product-card-width: 250px; /* Ancho de las tarjetas de producto */
+
+  --section-spacing: clamp(2rem, 5vw, 4rem);
+}
+@media (max-width: 768px) {
+  :root {
+    --product-card-width: 160px;
+  }
+}
+:root.light {
+  /* Fondos */
+  --bg-body: #FAFAFA;           /* fondo general (muy claro, no blanco puro) */
+  --bg-surface: #FFFFFF;        /* contenedores comunes */
+  --bg-header: #F1F3F4;         /* encabezados, navbar o topbar */
+
+  /* Extensiones recomendadas */
+  --bg-card: #F8F9FA;           /* tarjetas, secciones elevadas */
+  --bg-hover: #EDEDED;          /* hover sobre cards o botones */
+  --bg-elevated: #E0E0E0;       /* componentes destacados o con sombra */
+
+  /* Bordes y sombra */
+  --border-default: #DADCE0;     /* gris muy claro, como Google */
+  --shadow-medium: rgba(0, 0, 0, 0.1); /* sombra leve para elevación */
+  --gradient-strong: rgba(255, 255, 255, 0.75);
+  --gradient-soft: rgba(255, 255, 255, 0.35);
+
+  /* Textos */
+  --text-primary: #202124;      /* Texto principal (casi negro) */
+  --text-secondary: #5F6368;    /* Texto normal / cuerpo */
+  --text-tertiary: #80868B;     /* Texto auxiliar (small, labels) */
+  --text-disabled: #B0B0B0;     /* Placeholder o texto inactivo */
+
+  /* Enlaces y acentos */
+  --text-accent: #1A73E8;         /* Azul Google-style para links */
+  --text-accent-hover: #4285F4;   /* Hover en enlace */
+  --text-accent-visited: #174EA6; /* Enlace visitado */
+}
+
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  margin-top: var(--header-height);
+}
+
+button {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+
+button:hover {
+  background-color: var(--bg-hover);
+}
+
+button:focus {
+  outline: 2px solid var(--text-accent-hover);
+  outline-offset: 2px;
+}
+
+h1, h2, h3, h4{
+  color: var(--text-primary);
+}
+
+p, li, span, label {
+  color: var(--text-secondary);
+}
+
+p, li, span, label, h1, h2, h3, h4, a {
+  transition: color .24s ease-in;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  transition: background-color 0.24s ease-out, color 0.24s ease-in, border-color 0.24s ease-in;
+}
+
+
+a {
+  color: var(--text-accent);
+}
+
+section {
+  max-width: clamp(320px, 90vw, 1200px);
+  margin: 0 auto;
+  margin-block: var(--section-spacing);
+  padding: 1rem;
+}
+
+.sidebar {
+  display: none !important;
+}
+
+.site-header {
+  display: flex !important;
+}
+
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: flex !important;
+  }
+
+  .site-header {
+    display: none !important;
+  }
+  body {
+    margin-left: var(--sidebar-closed-width);
+    margin-top: 0;
+  }
+}
+
+
+
+
+/* Base: estados y variables */
+.sa {
+  /* Variables configurables por elemento o tema */
+  --sa-dur: 0.8s;
+  --sa-ease: ease;
+  --sa-x: -40px;        /* entrada desde izquierda por defecto */
+  --sa-y: 0px;
+  --sa-x-out: 40px;     /* salida hacia derecha por defecto */
+  --sa-y-out: 0px;
+  opacity: 0;
+  transform: translate(var(--sa-x), var(--sa-y));
+  transition:
+  opacity var(--sa-dur) var(--sa-ease),
+  transform var(--sa-dur) var(--sa-ease);
+}
+
+.sa--in {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.sa--out {
+  opacity: 0;
+  transform: translate(var(--sa-x-out), var(--sa-y-out));
+}
+
+/* Direcciones por data-atributo (opcionales, puedes ajustar por elemento) */
+.sa[data-sa-from="left"]  { --sa-x: -40px;  --sa-y: 0px;   --sa-x-out: 40px;   --sa-y-out: 0px; }
+.sa[data-sa-from="right"] { --sa-x:  40px;  --sa-y: 0px;   --sa-x-out: -40px;  --sa-y-out: 0px; }
+.sa[data-sa-from="up"]    { --sa-x:  0px;   --sa-y: 40px;  --sa-x-out: 0px;    --sa-y-out: -40px; }
+.sa[data-sa-from="down"]  { --sa-x:  0px;   --sa-y: -40px; --sa-x-out: 0px;    --sa-y-out: 40px; }
+
+/* Respeto a prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .sa {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+
+.site-logo {
+    display: inline-block;       /* ajusta al tamaño del contenido */
+    margin: 0;
+    padding: 0;                  /* sin separación */
+    border: 1px solid var(--border-default); /* borde sutil */
+    border-radius: 0.4rem;
+    line-height: 0;              /* elimina espacio vertical extra */
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.site-logo img {
+    display: block;              /* elimina espacio fantasma inline */
+    height: clamp(28px, 6vw, 40px);
+    width: auto;
+    object-fit: contain;
+    border-radius: inherit;      /* redondea igual que el h1 */
+}
+
+.site-logo:hover {
+    background: var(--bg-hover);
+    border-color: var(--text-accent);
+    transform: translateY(-1px);
+}
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sidebar .site-logo img {
+    height: 40px;
+}
+
+.sidebar .site-logo {
+    margin-left: 1rem;
+}
