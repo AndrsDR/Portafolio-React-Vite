@@ -11,38 +11,42 @@ def _json(status, obj):
         "body": json.dumps(obj, ensure_ascii=False)
     }
 
-def handler(request):
+def _get_body(request):
     try:
-        body = request.get("body", "")
-        if isinstance(body, bytes):
-            body = body.decode("utf-8")
-        data = json.loads(body or "{}")
+        if isinstance(request, dict):
+            body = request.get("body", "")
+        else:
+            body = getattr(request, "body", "") or ""
+        if isinstance(body, (bytes, bytearray)):
+            return body.decode("utf-8", "ignore")
+        return body or ""
+    except Exception:
+        return ""
 
-        items = data.get("q") or []
+def handler(request):
+    q = ""
+    try:
+        raw = _get_body(request)
+        data = json.loads(raw or "{}")
+        q = (data.get("q") or "").strip()
         src = (data.get("source") or "en").lower().strip()
         tgt = (data.get("target") or "es").lower().strip()
 
-        # lista alineada (mismo orden, incluyendo duplicados/vacíos como vacíos)
-        out_list = []
-        for raw in items:
-            s = (raw or "").strip()
-            if not s:
-                out_list.append("")
-                continue
-            key = (src, tgt, s)
-            if key in _CACHE:
-                out_list.append(_CACHE[key])
-                continue
-            try:
-                t = GoogleTranslator(source=src, target=tgt).translate(s)
-                t = t if isinstance(t, str) and t.strip() else s
-            except Exception:
-                t = s
-            if len(_CACHE) >= _MAX:
-                _CACHE.pop(next(iter(_CACHE)))
-            _CACHE[key] = t
-            out_list.append(t)
+        if not q:
+            return _json(200, {"translatedText": ""})
 
-        return _json(200, {"translations": out_list})
+        key = (src, tgt, q)
+        if key in _CACHE:
+            return _json(200, {"translatedText": _CACHE[key]})
+
+        out = GoogleTranslator(source=src, target=tgt).translate(q)
+        out = out if isinstance(out, str) and out.strip() else q
+
+        if len(_CACHE) >= _MAX:
+            _CACHE.pop(next(iter(_CACHE)))
+        _CACHE[key] = out
+
+        return _json(200, {"translatedText": out})
     except Exception as e:
-        return _json(200, {"translations": [], "error": str(e)})
+        # Fallback controlado: no referenciar variables locales que podrían no existir
+        return _json(200, {"translatedText": q, "error": str(e)})
