@@ -24,29 +24,38 @@ def _get_body(request):
         return ""
 
 def handler(request):
-    q = ""
     try:
         raw = _get_body(request)
         data = json.loads(raw or "{}")
-        q = (data.get("q") or "").strip()
+
+        items = data.get("q") or []
         src = (data.get("source") or "en").lower().strip()
         tgt = (data.get("target") or "es").lower().strip()
 
-        if not q:
-            return _json(200, {"translatedText": ""})
+        out_list = []
+        for raw_item in items:
+            s = (raw_item or "").strip()
+            if not s:
+                out_list.append("")
+                continue
 
-        key = (src, tgt, q)
-        if key in _CACHE:
-            return _json(200, {"translatedText": _CACHE[key]})
+            key = (src, tgt, s)
+            cached = _CACHE.get(key)
+            if cached is not None:
+                out_list.append(cached)
+                continue
 
-        out = GoogleTranslator(source=src, target=tgt).translate(q)
-        out = out if isinstance(out, str) and out.strip() else q
+            try:
+                t = GoogleTranslator(source=src, target=tgt).translate(s)
+                t = t if isinstance(t, str) and t.strip() else s
+            except Exception:
+                t = s
 
-        if len(_CACHE) >= _MAX:
-            _CACHE.pop(next(iter(_CACHE)))
-        _CACHE[key] = out
+            if len(_CACHE) >= _MAX:
+                _CACHE.pop(next(iter(_CACHE)))
+            _CACHE[key] = t
+            out_list.append(t)
 
-        return _json(200, {"translatedText": out})
+        return _json(200, {"translations": out_list})
     except Exception as e:
-        # Fallback controlado: no referenciar variables locales que podrían no existir
-        return _json(200, {"translatedText": q, "error": str(e)})
+        return _json(200, {"translations": [], "error": str(e)})
