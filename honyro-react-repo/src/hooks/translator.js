@@ -28,7 +28,7 @@ export function useTranslator({ text, translate }) {
 
         let cancelled = false;
 
-        fetch('/api/translate/index', {
+        fetch('/api/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             // ¡OJO! aquí solo mandamos el string plano
@@ -59,4 +59,5 @@ export function useTranslator({ text, translate }) {
 
     return { translatedText };
 }
+
 
