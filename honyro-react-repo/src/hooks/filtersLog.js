@@ -21,7 +21,7 @@ async function translateTextPlain(text, translate) {
     const str = typeof text === 'string' ? text : '';
     if (!str.trim()) return str;
     const { from, to } = _resolveLangs(translate);
-    const res = await fetch('/api/translate', {
+    const res = await fetch('/api/translate/index', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ q: str, source: from, target: to })
@@ -126,3 +126,4 @@ export function useFiltersLog(filters,  delayMs = 500, products) {
 
     return  searchedProducts
 }
+
