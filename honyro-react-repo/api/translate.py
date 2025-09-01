@@ -1,7 +1,6 @@
 import json
 from deep_translator import GoogleTranslator
 
-# cache súper simple
 _CACHE = {}
 _MAX = 5000
 
@@ -12,14 +11,23 @@ def _json(status, obj):
         "body": json.dumps(obj, ensure_ascii=False)
     }
 
-def handler(request):
+def _get_body(request):
     try:
-        # Vercel pasa el body como str o bytes; normalizamos
-        body = request.get("body", "")
-        if isinstance(body, bytes):
-            body = body.decode("utf-8")
-        data = json.loads(body or "{}")
+        if isinstance(request, dict):
+            body = request.get("body", "")
+        else:
+            body = getattr(request, "body", "") or ""
+        if isinstance(body, (bytes, bytearray)):
+            return body.decode("utf-8", "ignore")
+        return body or ""
+    except Exception:
+        return ""
 
+def handler(request):
+    q = ""
+    try:
+        raw = _get_body(request)
+        data = json.loads(raw or "{}")
         q = (data.get("q") or "").strip()
         src = (data.get("source") or "en").lower().strip()
         tgt = (data.get("target") or "es").lower().strip()
@@ -40,5 +48,5 @@ def handler(request):
 
         return _json(200, {"translatedText": out})
     except Exception as e:
-        # Fallback controlado: no reventar la UI
-        return _json(200, {"translatedText": (data.get("q") or ""), "error": str(e)})
+        # Fallback controlado: no referenciar variables locales que podrían no existir
+        return _json(200, {"translatedText": q, "error": str(e)})
