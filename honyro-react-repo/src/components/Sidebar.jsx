@@ -24,7 +24,7 @@ export function Sidebar() {
         <aside className={'sidebar ' + (sidebarOpen ? 'open' : 'closed')}>
             <div className="sidebar-header">
                 <h1 className="site-logo">
-                    <img src="/textp-perfil.png" alt="Honyro" />
+                    <img src="/perfil.png" alt="Honyro" />
                     <span className="visually-hidden">Honyro</span>
                 </h1>
                 <button className="sidebar-toggle" onClick={toggleSidebar}>
@@ -110,4 +110,5 @@ export function Sidebar() {
         
     );
 }
+
 
