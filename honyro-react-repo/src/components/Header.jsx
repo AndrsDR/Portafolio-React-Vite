@@ -16,7 +16,7 @@ export function Header() {
     return (
         <header className="site-header">
             <h1 className="site-logo">
-                <img src="../public/perfil.png" alt="Honyro" />
+                <img src="../public/team.png" alt="Honyro" />
                 <span className="visually-hidden">Honyro</span>
             </h1>
 
@@ -55,4 +55,5 @@ export function Header() {
             </nav>
         </header>
     );
+
 }
